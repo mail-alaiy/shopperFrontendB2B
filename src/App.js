@@ -13,18 +13,16 @@ import Thanku from './pages/thanku/Thanku';
 import Navbar from './components/navbar/Navbar';
 
 import Footer from './components/footer/Footer';
-import BookToys from './Categories/BooksToys/BookToys';
 import AllCategories from './Categories/AllCategories';
-import FashionBeauty from './Categories/FashionBeauty/FashionBeauty';
-import Electronics from './Categories/Electronics/Electronics';
 import Signup from './pages/signup/Signup';
+import Categories from './pages/category/Category';
 
 const stripePromise = loadStripe(
   'pk_test_51JdCsbSDjgMnau9ncKpDOaddNIWtdhVTTV92V4ShkTzLec033vWcRQjqEUByb1s4D6vmPmH6oMK0bkBJyBlRsStp00wQV1pNuX'
 );
 function App() {
   //to keep a check who is signed in/making a listner
-  const [{ }, dispatch] = useStateValue();
+  const [{}, dispatch] = useStateValue();
   //This State will keep Track of what is entered in the searchField
   const [searchField, setSearchField] = useState('');
 
@@ -32,6 +30,7 @@ function App() {
   let inputHandler = (event) => {
     setSearchField(event.target.value);
   };
+
   useEffect(() => {
     //will run only once when the app component loads
     auth.onAuthStateChanged((authUser) => {
@@ -54,53 +53,70 @@ function App() {
         });
       }
     });
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
-
       <BrowserRouter>
         <div className="App">
           <Routes>
-            <Route path="/thanku" element={<>
-              <Header />
-              <Thanku />
-            </>} />
-            <Route path="/Payment" element={<>
-              <Header />
-              {/* wraps the payment elements,
+            <Route
+              path="/thanku"
+              element={
+                <>
+                  <Header />
+                  <Thanku />
+                </>
+              }
+            />
+            <Route
+              path="/Payment"
+              element={
+                <>
+                  <Header />
+                  {/* wraps the payment elements,
           no need to understand it */}
-              <Elements stripe={stripePromise}>
-                <Payment />
-              </Elements>
-            </>} />
+                  <Elements stripe={stripePromise}>
+                    <Payment />
+                  </Elements>
+                </>
+              }
+            />
 
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/checkout" element={<>
-              <Header />
-              <Checkout /></>} />
-            <Route path="/books-toys" element={<> <Header />
-              <Navbar />
-              <BookToys /></>} />
-            <Route path="/fashion-beauty" element={<>
-              <Header />
-              <Navbar />
-              <FashionBeauty />
-            </>} />
+            <Route
+              path="/checkout"
+              element={
+                <>
+                  <Header />
+                  <Checkout />
+                </>
+              }
+            />
 
-            <Route path="/electronics" element={<>
-              <Header />
-              <Navbar />
-              <Electronics />
-            </>} />
+            <Route
+              path="/categories/:category"
+              element={
+                <>
+                  <Header />
+                  <Navbar />
+                  <Categories />
+                </>
+              }
+            />
 
-            <Route path="/" element={<>
-              <Header inputHandler={inputHandler} />
-              <Navbar />
-              <Home text={searchField} />
-              <AllCategories />
-            </>} />
+            <Route
+              path="/"
+              element={
+                <>
+                  <Header inputHandler={inputHandler} />
+                  <Navbar />
+                  <Home text={searchField} />
+                  <AllCategories />
+                </>
+              }
+            />
           </Routes>
           <Footer />
         </div>
